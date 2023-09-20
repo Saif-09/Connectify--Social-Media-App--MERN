@@ -5,7 +5,7 @@ const initialState = {
 
     // Try to retrieve the 'theme' item from the browser's local storage and parse it as JSON.
     // If the 'theme' item doesn't exist or is null, the default value "light" will be used.
-    theme: JSON.parse(window?.localStorage.getItem("theme")) ?? "dark",
+    theme: JSON.parse(window?.localStorage.getItem("theme")) ?? "light",
 };
 
 const themeSlice = createSlice({
