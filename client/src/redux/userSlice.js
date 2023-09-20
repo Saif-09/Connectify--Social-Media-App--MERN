@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import {user} from "../assets/data";
 
 
 const initialState = {
   // The 'user' property will store user information retrieved from local storage, if available
-  user: JSON.parse(window?.localStorage.getItem("user")) ?? {},
+  user: JSON.parse(window?.localStorage.getItem("user")) ?? user,
   
   // The 'edit' property represents whether the user is in edit mode
   edit: false,
