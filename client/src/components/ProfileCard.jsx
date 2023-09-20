@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
 import {NoProfile} from "../assets/index";
 import {LiaEditSolid} from "react-icons/lia"
-import { BsPersonFillAdd } from 'react-icons/bs';
+import { BsBriefcase, BsFacebook, BsInstagram, BsPersonFillAdd } from 'react-icons/bs';
+import {FaXTwitter} from 'react-icons/fa6';
+import { CiLocationOn} from 'react-icons/ci';
+import {updateProfile} from '../redux/userSlice';
+import moment from 'moment';
+import { formatDistanceToNow } from 'date-fns';
 
 const ProfileCard = ({user}) => {
     const {user:data, edit} = useSelector((state)=> state.user);
@@ -31,7 +36,7 @@ const ProfileCard = ({user}) => {
                         <LiaEditSolid 
                         size = {22}
                         className='text-blue cursor-pointer'
-                        onClick={()=>dispatch(UpdateProfile(true))}
+                        onClick={()=>dispatch(updateProfile(true))}
                         />
                     ):(
                         <button
@@ -43,6 +48,54 @@ const ProfileCard = ({user}) => {
                         </button>
                     )}
                 </div>
+            </div>
+
+            <div className='w-full flex flex-col gap-2 py-4 border-b border-[#66666645]'>
+                <div className='flex gap-2 items-center text-ascent-2'>
+                    <CiLocationOn className="text-xl text-ascent-1" />
+                    <span>{user?.location ?? "Add Location"}</span>
+                </div>
+
+                <div className='flex gap-2 items-center text-ascent-2'>
+                    <BsBriefcase className="text-lg text-ascent-1" />
+                    <span>{user?.profession ?? "Add Profession"}</span>
+                </div>
+
+            </div>
+            <div className='w-full flex flex-col gap-2 py-4 border-b border-[#66666645]'>
+                <p className='text-xl text-ascent-1 font-semibold'>
+                    {user?.friends?.length} Friends
+                </p>
+
+                <div className='flex items-center justify-between '>
+                    <span className='text-ascent-2'>Who viewed your profile</span>
+                    <span className='text-ascent-1 text-lg'>{user?.views?.length}</span>
+                </div>
+
+                <span className='text-base text-blue'>{user?.verified?"Verified Account" : "Not Verified"}</span>
+
+                <div className='flex items-center justify-between'>
+                    <span className='text-ascent-2'>Joined</span>
+                    <span>{formatDistanceToNow(new Date(user?.createdAt))} ago</span>
+                </div>
+            </div>
+
+            <div className='w-full flex flex-col gap-4 py-4 pb-6 '>
+                <p className='text-ascent-1 text-lg font-semibold'>Social Profile</p>
+
+                <div className='flex gap-2 items-center text-ascent-2'>
+                    <BsInstagram className='text-xl text-ascent-1'/>
+                    <span>Instagram</span>
+                </div>
+                <div className='flex gap-2 items-center text-ascent-2'>
+                    <BsFacebook className='text-xl text-ascent-1'/>
+                    <span>Facebook</span>
+                </div>
+                <div className='flex gap-2 items-center text-ascent-2'>
+                    <FaXTwitter className='text-xl text-ascent-1 font-semibold'/>
+                    <span>X</span>
+                </div>
+                
             </div>
         </div>
       
