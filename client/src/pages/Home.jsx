@@ -109,7 +109,7 @@ const Home = () => {
           {
             loading ? (<Loading />) : posts?.length > 0 ? (
               posts?.map((post) => (
-                <PostCard key={post?.id} post={post}
+                <PostCard key={post?._id} post={post}
                   user={user}
                   delete={() => { }}
                   likePost={() => { }} />
