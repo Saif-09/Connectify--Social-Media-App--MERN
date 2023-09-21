@@ -11,7 +11,7 @@ const {
     AUTH_PASSWORD,
     APP_URL
 
-} = PROCESS.env;
+} = process.env;
 
 let transporter = nodemailer.createTransport({
     host: "smtp-mail.outlook.com",
@@ -37,23 +37,23 @@ export const sendVerificationEmail = async (user, res) => {
         from: AUTH_EMAIL,
         to: email,
         subject: `Verify your account`,
-        html: `<div style="font-family: Arial, Helvetica, sans-serif; font-size: 20px; color: #333; background-color: white;">
-        <h1 style="color:rgb(8,56,188)">Please Verify Your Email Address</h1>
-        <hr>
+        html: `<div style="font-family: Arial, Helvetica, sans-serif; font-size: 20px; color: #333; background-color: #f0f0f0; padding: 20px; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <h1 style="color:rgb(8, 56, 188); margin-top: 0;">Please Verify Your Email Address</h1>
+        <hr style="border: 1px solid #ccc; margin-bottom: 20px;">
         <h4>Hi ${firstName},</h4>
-        <p>Please verify your email address so we can know that it's really you.
-            <br>
-        <p>This link <b>expires in 1 hour</b></p>
-        <br>
-        <a href="${link}" style="color:#fff;padding:14px; text-decoration:none; background-color: #000;">Verify Now!</a>
+        <p>
+            Please verify your email address to confirm your identity and complete the registration process.
         </p>
+        <p>
+            This verification link will expire in <b>1 hour</b>.
+        </p>
+        <a href="${link}" style="display: inline-block; padding: 14px 24px; background-color: #008CBA; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;">Verify Now</a>
         <div style="margin-top: 20px;">
-            <h5>Best Regards</h5>
+            <h5>Best Regards,</h5>
             <h5>Connectify Team</h5>
-    
         </div>
-    
-    </div>`,
+    </div>
+    `,
     };
 
     try {

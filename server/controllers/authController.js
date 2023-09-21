@@ -18,7 +18,7 @@ export const register = async (req, res, next) => {
             return;
         }
 
-        const hashedPassword = await hashString(passowrd);
+        const hashedPassword = await hashString(password);
 
         const user = await Users.create({
             firstName,
@@ -46,7 +46,7 @@ export const login = async (req, res, next) => {
 
         // find user by email
         const user = await Users.findOne({ email }).select("+password").populate({
-            path: "select",
+            path: "friends",
             select: "firstName lastName location profileUrl -password",
         });
 
@@ -79,5 +79,7 @@ export const login = async (req, res, next) => {
 
     } catch (error) {
         // handle error
+        console.log(error);
+        res.status(404).json({message: error.message});
     }
 }
