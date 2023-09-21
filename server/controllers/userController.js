@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import Verification from "../models/emailVerification.js";
-import Users from "../models/userModel";
-import { compare } from "bcryptjs";
+import Users from "../models/userModel.js";
 import { compareString } from "../utils/index.js";
 
 export const verifyEmail = async (req, res) => {
