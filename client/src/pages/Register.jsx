@@ -26,6 +26,7 @@ const Register = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
+    
 
   }
 
