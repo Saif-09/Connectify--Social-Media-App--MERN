@@ -122,37 +122,38 @@ export const resetPassword = async (req, res) => {
 
         if (!user) {
             const message = "Invalid password reset link. Try again";
-            res.redirect(
+            return res.redirect(
                 `/users/resetpassword?status=error&message=${message}`
-            )
+            );
         }
 
         const resetPassword = await PasswordReset.findOne({ userId });
         if (!resetPassword) {
-            const message = "Invalid password reset link. Try again"
-            res.redirect(`/users/resetpassword?status=error&message=${message}`)
+            const message = "Invalid password reset link. Try again";
+            return res.redirect(`/users/resetpassword?status=error&message=${message}`);
         }
 
         const { expiresAt, token: resetToken } = resetPassword;
 
         if (expiresAt < Date.now()) {
             const message = "Reset Password link has expired. Please try again";
-            res.redirect(`/users/resetpassword?status=error&message=${message}`);
+            return res.redirect(`/users/resetpassword?status=error&message=${message}`);
         } else {
             const isMatch = await compareString(token, resetToken);
             if (!isMatch) {
                 const message = "Invalid reset password link. Please try again";
-                res.redirect(`/users/resetpassword?status=error&message=${message}`);
+                return res.redirect(`/users/resetpassword?status=error&message=${message}`);
             } else {
-                res.redirect(`/users/resetpassword?type=reset&id=${userId}`);
+                return res.redirect(`/users/resetpassword?type=reset&id=${userId}`);
             }
         }
     } catch (error) {
         // Error handling
         console.log(error);
-        res.status(404).json({ message: error.message })
+        res.status(404).json({ message: error.message });
     }
 }
+
 
 
 export const changePassword = async (req, res) => {

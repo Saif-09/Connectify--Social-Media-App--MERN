@@ -1,6 +1,11 @@
 import axios from "axios";
+import { SetPosts } from "../redux/postSlice";
 
-const API_URL = "http://localhost:8080";
+
+const apiKey = import.meta.env.VITE_CLOUDINARY_ID;
+
+
+const API_URL = "http://localhost:8080/";
 
 export const API = axios.create({
     baseURL: API_URL,
@@ -33,9 +38,11 @@ export const handleFileUpload = async (uploadFile) => {
     formData.append("file", uploadFile);
     formData.append("upload_preset", "connectify");
 
+    console.log("cloudinarykey",apiKey)
+
     try {
         const response = await axios.post(
-            `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_ID}/image/upload/`, formData
+            `https://api.cloudinary.com/v1_1/${apiKey}/image/upload/`, formData
         );
         return response.data.secure_url;
 

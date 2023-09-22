@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import {useForm} from "react-hook-form"
 import { CustomButton, InputText, Loading } from '../components';
+import { apiRequest } from '../utils';
 
 const ResetPassword = () => {
 
@@ -15,7 +16,24 @@ const ResetPassword = () => {
     mode: "onChange",
   })
   const onSubmit = async(data)=>{
-    
+    setIsSubmitting(true);
+    try {
+      const res = await apiRequest({
+        url: "/users/request-passwordreset",
+        data,
+        method: "POST",
+      });
+      if(res?.status === "failed"){
+        setErrMsg(res);
+      }
+      else{
+        setErrMsg(res);
+      }
+      setIsSubmitting(false);
+    } catch (error) {
+      console.log(error)
+      setIsSubmitting(false);
+    }
   };
   return (
     <div className='w-full h-[100vh] bg-bgColor flex items-center justify-center p-6'>
@@ -46,7 +64,7 @@ const ResetPassword = () => {
               // Check if 'errMsg' has a 'message' property and if it exists, render the following:
               errMsg?.message && (
                 // Render a <span> element with conditional classes based on 'err.Msg?.status'
-                <span className={`text-sm ${err.Msg?.status === "failed" ? "text-[#f64949fe]" : "text-[#2ba150fe]"} mt-0.5`}>
+                <span className={`text-sm ${errMsg?.status === "failed" ? "text-[#f64949fe]" : "text-[#2ba150fe]"} mt-0.5`}>
                   {/* Display the 'errMsg' message */}
                   {errMsg?.message}
                 </span>

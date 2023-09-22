@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import InputText from './InputText';
 import CustomButton from './CustomButton';
 import Loading from './Loading';
-import { updateProfile } from '../redux/userSlice';
+import { UserLogin, updateProfile } from '../redux/userSlice';
+import { apiRequest, handleFileUpload } from '../utils';
 
 const EditProfile = () => {
 
@@ -20,11 +21,49 @@ const EditProfile = () => {
         defaultValues: { ...user },
     });
 
-    const onSubmit = async (data) => { }
+    const onSubmit = async (data) => {
+        setIsSubmitting(true);
+        setErrMsg("");
+        try {
+            const uri= picture && (await handleFileUpload(picture));
+
+            const { firstName, lastName, location, profession} = data;
+
+            const res = await apiRequest({
+                url: "/users/update-user",
+                data:{
+                    firstName,
+                    lastName,
+                    location,
+                    profession,
+                    profileUrl: uri ? uri : user?.profileUrl,
+                },
+                method: "PUT",
+                token: user?.token,
+            });
+            if (res?.status === "failed") {
+                setErrMsg(res);
+            } else {
+                setErrMsg(res);
+                const newUser = { token: res?.token, ...res?.user };
+                dispatch(UserLogin(newUser));
+
+                setTimeout(() => {
+                    dispatch(updateProfile(false));
+                }, 3000);
+            }
+
+            setIsSubmitting(false);
+            
+        } catch (error) {
+            console.log(error);
+            setIsSubmitting(false);
+        }
+     }
     const handleClose =  () => {
         dispatch(updateProfile(false))
      }
-    const handleSelect = () => {
+    const handleSelect = (e) => {
         setPicture(e.target.files[0])
      }
 
@@ -122,7 +161,7 @@ const EditProfile = () => {
                                 // Check if 'errMsg' has a 'message' property and if it exists, render the following:
                                 errMsg?.message && (
                                     // Render a <span> element with conditional classes based on 'err.Msg?.status'
-                                    <span role='alert' className={`text-sm ${err.Msg?.status === "failed" ? "text-[#f64949fe]" : "text-[#2ba150fe]"} mt-0.5`}>
+                                    <span role='alert' className={`text-sm ${errMsg?.status === "failed" ? "text-[#f64949fe]" : "text-[#2ba150fe]"} mt-0.5`}>
                                         {/* Display the 'errMsg' message */}
                                         {errMsg?.message}
                                     </span>

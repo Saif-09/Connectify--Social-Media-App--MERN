@@ -8,8 +8,20 @@ import InputText from './InputText';
 import Loading from './Loading';
 import CustomButton from './CustomButton';
 import { useForm } from 'react-hook-form';
-import { postComments } from '../assets/data';
+import { postComments, posts } from '../assets/data';
+import { apiRequest } from '../utils';
 
+const getPostComments = async(id)=>{
+    try {
+        const res = await apiRequest({
+            url: "/posts/comments/" + id,
+            method: "GET",
+        });
+        return res?.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 const ReplyCard = ({ reply, user, handleLike }) => {
 
@@ -61,7 +73,37 @@ const CommentForm = ({ user, id, replyAt, getComments }) => {
     });
 
     const onSubmit = async (data) => {
-
+        setLoading(true)
+        setErrMsg("");
+        try {
+            const URL = !replyAt
+                ? "/posts/comment/" + id
+                : "/posts/reply-comment/" +id;
+            const newData = {
+                comment: data?.comment,
+                from: user?.firstName + " " + user.lastName,
+                replyAt: replyAt,
+            };
+            const res = await apiRequest({
+                url: URL,
+                data: newData,
+                token: user?.token,
+                method: "POST"
+            })
+            if(res?.status === "failed"){
+                setErrMsg(res);
+            }else{
+                reset({
+                    comment:"",
+                })
+                setErrMsg("");
+                await getComments();
+            }
+            setLoading(false)
+            
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -107,20 +149,23 @@ const CommentForm = ({ user, id, replyAt, getComments }) => {
 
 const PostCard = ({ post, user, deletePost, likePost }) => {
     const [showAll, setShowAll] = useState(0);
-    const [showReply, setShowReply] = useState(null);
+    const [showReply, setShowReply] = useState(0);
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [replyComments, setReplyComments] = useState(null);
+    const [replyComments, setReplyComments] = useState(0);
     const [showComments, setShowComments] = useState(0);
 
-    const getComments = async () => {
+    const getComments = async (id) => {
         setReplyComments(0);
-
-        setComments(postComments)
+        const result = await getPostComments(id)
+        setComments(result)
         setLoading(false)
     };
 
-    const handleLike = async () => { }
+    const handleLike = async (uri) => {
+        await likePost(uri);
+        await getComments(posts?._id);
+     }
 
 
 
@@ -183,8 +228,9 @@ const PostCard = ({ post, user, deletePost, likePost }) => {
             </div>
 
             <div className='mt-4 flex justify-between items-center px-3 py-2 text-ascent-2 text-base border-t border-[#66666645]'>
-                <p className='flex gap-2 items-center text-base cursor-pointer'>
-                    {post?.likes?.includes(user?.id) ? (
+                <p className='flex gap-2 items-center text-base cursor-pointer'
+                onClick={()=>handleLike("/posts/like/" + post?._id)}>
+                    {post?.likes?.includes(user?._id) ? (
                         <BiSolidLike size={20} color='blue' />
                     ) : (
                         <BiLike size={20} />
@@ -252,7 +298,10 @@ const PostCard = ({ post, user, deletePost, likePost }) => {
                                         <p className='text-ascent-2'>{comment?.comment}</p>
 
                                         <div className='mt-2 flex gap-6 '>
-                                            <p className='flex gap-2 items-center text-base text-ascent-2 cursor-pointer'>
+                                            <p className='flex gap-2 items-center text-base text-ascent-2 cursor-pointer'
+                                            onClick={()=>{
+                                                handleLike("/posts/like-comment/"+comment?._id);
+                                            }}>
 
                                                 {comment?.likes?.includes(user?._id) ? (
                                                     <BiSolidLike size={20} color='blue' />
