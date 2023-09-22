@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { SocialImg } from '../assets'
+import { apiRequest } from '../utils'
+import { UserLogin } from '../redux/userSlice'
 
 
 const Login = () => {
@@ -25,7 +27,29 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async(data)=>{
+    setIsSubmitting(true);
 
+    try {
+      const res = await apiRequest({
+        url: "/auth/login",
+        data,
+        method:"POST",
+      });
+      if(res?.status === "failed"){
+        setErrMsg(res);
+      }else{
+        setErrMsg("");
+
+        const newData = {token: res?.token, ...res?.user};
+        dispatch(UserLogin(newData));
+        window.location.replace("/");
+      }
+      setIsSubmitting(false);
+      
+    } catch (error) {
+      console.log(error);
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -79,7 +103,7 @@ const Login = () => {
               // Check if 'errMsg' has a 'message' property and if it exists, render the following:
               errMsg?.message && (
                 // Render a <span> element with conditional classes based on 'err.Msg?.status'
-                <span className={`text-sm ${err.Msg?.status === "failed" ? "text-[#f64949fe]" : "text-[#2ba150fe]"} mt-0.5`}>
+                <span className={`text-sm ${errMsg?.status === "failed" ? "text-[#f64949fe]" : "text-[#2ba150fe]"} mt-0.5`}>
                   {/* Display the 'errMsg' message */}
                   {errMsg?.message}
                 </span>

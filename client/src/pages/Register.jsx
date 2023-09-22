@@ -8,9 +8,11 @@ import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { SocialImg } from '../assets'
+import { apiRequest } from '../utils'
 
 
 const Register = () => {
+  
 
   // Using the useForm hook to manage form-related functionality.
   // Configuring the form mode to "onChange," which means validation occurs as the user makes changes.
@@ -26,7 +28,30 @@ const Register = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
-    
+    setIsSubmitting(true);
+
+    try {
+      const res = await apiRequest({
+        url: "/auth/register",
+        data: data,
+        method : "POST",
+      });
+      console.log(res);
+
+      // if(res?.status === "failed"){
+      //   setErrMsg(res);
+      // }else{
+      //   setErrMsg(res);
+      //   setTimeout(()=>{
+      //     window.location.replace("/login");
+      //   }, 5000)
+      // }
+      setIsSubmitting(false);
+    } catch (error) {
+      console.log(error)
+      setIsSubmitting(false);
+      
+    }
 
   }
 
