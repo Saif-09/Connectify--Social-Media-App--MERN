@@ -8,6 +8,7 @@ import { BsMoon, BsSunFill } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { SetTheme } from '../redux/themeSlice'
 import { UserLogout } from '../redux/userSlice'
+import { fetchPosts } from '../utils'
 
 
 const NavBar = () => {
@@ -17,6 +18,7 @@ const NavBar = () => {
     const { register, handleSubmit, formState: { errors } } = useForm()
 
     const handleSearch = async (data) => {
+        await fetchPosts(user.token, dispatch, "",data);
 
     }
 

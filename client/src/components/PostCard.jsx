@@ -179,7 +179,7 @@ const PostCard = ({ post, user, deletePost, likePost }) => {
                     < img
                         src={post?.userId?.profileUrl ?? NoProfile}
                         alt={post?.userld?.firstName}
-                        className='w-14 h-14 object-cover rounded-full' />
+                        className='w-12 h-12 md:w-14 md:h-14 object-cover rounded-full' />
                 </Link>
 
                 <div className='w-full flex justify-between '>
@@ -190,9 +190,12 @@ const PostCard = ({ post, user, deletePost, likePost }) => {
                             </p>
                         </Link>
                         <span className='text-ascent-2'>{post?.userId?.location}</span>
+                        <span className='md:hidden flex text-ascent-2 text-xs'>
+                        {formatDistanceToNow(new Date(post?.createdAt ?? "2023-09-21"))}
+                    </span>
                     </div>
 
-                    <span className='text-ascent-2'>
+                    <span className='hidden md:flex text-ascent-2'>
                         {formatDistanceToNow(new Date(post?.createdAt ?? "2023-09-21"))}
                     </span>
 
