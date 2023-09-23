@@ -22,6 +22,7 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const { register, handleSubmit,reset, formState: { errors }, } = useForm();
+  
   const handlePostSubmit = async (data) => { 
     setPosting(true)
     setErrMsg("");
@@ -222,7 +223,8 @@ const Home = () => {
         {
           loading ? (<Loading />) : posts?.length > 0 ? (
             posts?.map((post) => (
-              <PostCard key={post?._id} post={post}
+              <PostCard key={post?._id}
+                post={post}
                 user={user}
                 deletePost={handleDelete}
                 likePost={handleLikePost} />

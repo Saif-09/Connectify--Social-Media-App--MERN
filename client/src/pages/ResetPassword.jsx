@@ -20,7 +20,7 @@ const ResetPassword = () => {
     try {
       const res = await apiRequest({
         url: "/users/request-passwordreset",
-        data,
+        data:data,
         method: "POST",
       });
       if(res?.status === "failed"){

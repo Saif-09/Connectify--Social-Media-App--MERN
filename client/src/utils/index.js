@@ -38,7 +38,7 @@ export const handleFileUpload = async (uploadFile) => {
     formData.append("file", uploadFile);
     formData.append("upload_preset", "connectify");
 
-    console.log("cloudinarykey",apiKey)
+    // console.log("cloudinarykey",apiKey)
 
     try {
         const response = await axios.post(
@@ -98,11 +98,12 @@ export const deletePost = async (id, token) => {
 
 export const getUserInfo = async (token, id) => {
     try {
-        const uri = id === undefined ? "/users/get-user" : "/users/get-user/" +
-            id;
+        
+        const uri = id === undefined ? "/users/get-user" : "/users/get-user/" + id;
+// console.log("getUserIfo",id)
 
         const res = await apiRequest({
-            uri: uri,
+            url: uri,
             token: token,
             method: "POST",
         });

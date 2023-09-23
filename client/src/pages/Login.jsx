@@ -32,7 +32,7 @@ const Login = () => {
     try {
       const res = await apiRequest({
         url: "/auth/login",
-        data,
+        data:data,
         method:"POST",
       });
       if(res?.status === "failed"){

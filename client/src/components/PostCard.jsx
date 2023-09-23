@@ -78,7 +78,8 @@ const CommentForm = ({ user, id, replyAt, getComments }) => {
         try {
             const URL = !replyAt
                 ? "/posts/comment/" + id
-                : "/posts/reply-comment/" +id;
+                : "/posts/reply-comment/" + id;
+
             const newData = {
                 comment: data?.comment,
                 from: user?.firstName + " " + user.lastName,
@@ -89,7 +90,7 @@ const CommentForm = ({ user, id, replyAt, getComments }) => {
                 data: newData,
                 token: user?.token,
                 method: "POST"
-            })
+            });
             if(res?.status === "failed"){
                 setErrMsg(res);
             }else{
@@ -98,8 +99,9 @@ const CommentForm = ({ user, id, replyAt, getComments }) => {
                 })
                 setErrMsg("");
                 await getComments();
+                
             }
-            setLoading(false)
+        setLoading(false)
             
         } catch (error) {
             console.log(error)
@@ -164,12 +166,8 @@ const PostCard = ({ post, user, deletePost, likePost }) => {
 
     const handleLike = async (uri) => {
         await likePost(uri);
-        await getComments(posts?._id);
+        await getComments(post?._id);
      }
-
-
-
-
 
 
     return (
