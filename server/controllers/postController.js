@@ -270,6 +270,7 @@ export const commentPost = async (req, res, next) => {
         if (comment === null) {
             return res.status(404).json({ message: "Comment is required." });
         }
+        // console.log("commented")
 
         const newComment = new Comments({ comment, from, userId, postId: id });
         await newComment.save();

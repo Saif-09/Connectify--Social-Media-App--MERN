@@ -8,7 +8,6 @@ import InputText from './InputText';
 import Loading from './Loading';
 import CustomButton from './CustomButton';
 import { useForm } from 'react-hook-form';
-import { postComments, posts } from '../assets/data';
 import { apiRequest } from '../utils';
 
 const getPostComments = async(id)=>{
@@ -76,9 +75,7 @@ const CommentForm = ({ user, id, replyAt, getComments }) => {
         setLoading(true)
         setErrMsg("");
         try {
-            const URL = !replyAt
-                ? "/posts/comment/" + id
-                : "/posts/reply-comment/" + id;
+            const URL = !replyAt ? "/posts/comment/" + id : "/posts/reply-comment/" + id;
 
             const newData = {
                 comment: data?.comment,
@@ -86,10 +83,11 @@ const CommentForm = ({ user, id, replyAt, getComments }) => {
                 replyAt: replyAt,
             };
             const res = await apiRequest({
+                method: "POST",
                 url: URL,
                 data: newData,
                 token: user?.token,
-                method: "POST"
+                
             });
             if(res?.status === "failed"){
                 setErrMsg(res);
