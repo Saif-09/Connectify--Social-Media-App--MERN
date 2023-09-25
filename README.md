@@ -2,6 +2,9 @@
 
 Introducing the Connectify App— a meticulously crafted, full-stack MERN-based platform designed to seamlessly foster connections, passionately share cherished memories through photos, and facilitate profound interactions. This innovative application has been thoughtfully and purposefully designed to deliver users an effortlessly gratifying social networking experience
 
+## Live at - https://connectify-social-reactapp.netlify.app/
+## Video Demo - https://youtu.be/1hzwcmaf3jw?si=Xr0fS9mV4XWbKdcz
+
 ## Features
 
 ### User Authentication
